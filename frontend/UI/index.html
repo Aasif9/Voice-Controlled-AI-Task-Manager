@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice To-DO List</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logout-btn {
+            background-color: var(--danger-color);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logout-btn:hover {
+            background-color: #e74c3c;
+            transform: translate(-2px);
+            box-shadow: 0 4px 8px var(--shadow-color);
+        }
+
+        .task-filter {
+            margin: 20px 0;
+            text-align: right;
+
+        }
+
+        .task-filter select {
+            padding: 8px 12px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            background-color: white;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .task-filter select:focus {
+            outline: none;
+            border-color: #4a90e2;
+            box-shadow: 0 0 3px rgba(74, 107, 255, 0.2);
+        }
+
+        .no-tasks-message {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-style: italic;
+            /* background: var(-card-bg);
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 4px 10px var(--shadow-color); */
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="header-container">
+            <div>
+                <h1><i class="fas fa-microphone-alt"></i>  Voice To-Do List</h1>
+                <p>Organize your tasks using voice commands</p>
+            </div>
+            <button class="logout-btn" id="logoutBtn"><i class="fas fas-sign-out-alt"></i> Logout</button>
+        </div>
+    </header>
+
+    <main>
+        <section class="todo-container">
+            <h2><i class="fas fa-plus-circle"></i> Add a task</h2>
+            <div class="task-filter">
+                <select id="dateFilter" onchange="filterTasks()">
+                    <option value="all">All Tasks</option>
+                    <option value="7">Next 7 Days</option>
+                    <option value="15">Next 15 Days</option>
+                    <option value="30">Next 30 Days</option>
+                </select>
+            </div>
+            <button class="voice-btn"> <i class="fas fa-microphone"></i> Add a task by voice</button>
+            <div id="todo-list"></div>
+        </section>
+
+        <section class="task-details">
+            <h2><i class="fas fa-tasks"></i> Task BreakDown</h2>
+            <div id="task-output">
+                <div class="task-info">
+                    <p><strong>Operation: </strong><span id="operation"></span></p>
+                    <p><strong>Task: </strong><span id="task"></span></p>
+                    <p><strong>Urgency: </strong><span id="urgency"></span></p>
+                    <p><strong>Date/Time: </strong><span id="datetime"></span></p>
+                </div>
+                <div id="confirmation-area"></div>
+            </div>
+
+        </section>
+    </main>
+    <!-- <section class="task-details">
+            <h2> Tasks </h2>
+            <div class="task-info">
+                <p><strong>Operation : Add</strong></p>
+                <p><strong>Task</strong></p>
+            </div>
+        </section> -->
+
+    <footer>
+        <p>&copy; 2025 Voice To-Do List | <i class="fas fa-code"></i> with <i class="fas fa-heart"
+                style="color: var(--danger-color);"></i></p>
+    </footer>
+
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <script type="module" src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggle = document.getElementById('themeToggle');
+            const html = document.documentElement;
+            const icon = themeToggle.querySelector('i');
+            const filter = document.getElementById('dateFilter')
+            const taskFilter = document.getElementsByClassName('task-filter')
+
+            const savedTheme = localStorage.getItem('theme') || 'light';
+
+            html.setAttribute('data-theme', savedTheme);
+            updateIcon(savedTheme);
+
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = html.getAttribute('data-theme');
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+
+                html.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                updateIcon(newTheme);
+            });
+
+            function updateIcon(theme) {
+                if (theme === 'dark') {
+                    icon.classList.remove('fa-moon');
+                    icon.classList.add('fa-sun');
+                    filter.style.backgroundColor = '2px solid var(--text-secondary)';
+                    taskFilter.style.backgroundColor= '2px solid var(--text-secondary)';
+
+                }
+                else {
+                    icon.classList.remove('fa-sun');
+                    icon.classList.add('fa-moon');
+                }
+            }
+        });
+
+    </script>
+</body>
+
+</html>
